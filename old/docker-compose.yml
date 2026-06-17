@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  db:
+    build:
+      context: .
+      dockerfile: ./docker/db/Dockerfile
+    image: postgres:15
+    container_name: sticker_shop_db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: sticker_shop_db
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  app:
+      build:
+        context: .
+        dockerfile: ./docker/app/Dockerfile
+      container_name: sticker_shop_app
+      ports:
+        - "3000:3000"
+      environment:
+        DATABASE_URL: postgres://postgres:password@db:5432/sticker_shop_db
+        DB_HOST: db
+        DB_PORT: 5432
+        DB_USER: postgres
+        DB_PASSWORD: password
+        DB_NAME: sticker_shop_db
+
+      depends_on:
+        - db
+
+volumes:
+  db_data:
