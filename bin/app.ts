@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import * as cdk from 'aws-cdk-lib/core';
 import { AppStack } from '../lib/app-stack';
+import { RdsStack } from '../lib/rds-stack';
 
 const app = new cdk.App();
 new AppStack(app, 'AppStack', {
@@ -18,3 +19,5 @@ new AppStack(app, 'AppStack', {
 
   /* For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html */
 });
+
+new RdsStack(app, 'RdsStack', {});
