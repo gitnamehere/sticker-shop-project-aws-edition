@@ -1,8 +1,8 @@
 import * as cdk from 'aws-cdk-lib/core';
 import * as lambda from "aws-cdk-lib/aws-lambda";
 import { Construct } from 'constructs';
-// import * as sqs from 'aws-cdk-lib/aws-sqs';
-
+import { LambdaIntegration, RestApi } from 'aws-cdk-lib/aws-apigateway';
+import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 export class AppStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
@@ -26,5 +26,17 @@ export class AppStack extends cdk.Stack {
         };
       `)
     });
+
+    const accountLambda = new NodejsFunction(this, "AccountLambda", {
+      runtime: lambda.Runtime.NODEJS_LATEST,
+      entry: "src/lambda/account/handler.ts",
+    });
+
+    const api = new RestApi(this, "StickerShopAPI")
+    const helloWorldLambdaIntegration = new LambdaIntegration(helloWorldLambda);
+    const accountLambdaIntegration = new LambdaIntegration(accountLambda);
+
+    api.root.addMethod('GET', helloWorldLambdaIntegration);
+    api.root.addResource('account').addMethod('GET', accountLambdaIntegration);
   }
 }
