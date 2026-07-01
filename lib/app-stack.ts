@@ -32,7 +32,7 @@ export class AppStack extends cdk.Stack {
       entry: "src/lambda/account/handler.ts",
     });
 
-    const api = new RestApi(this, "StickerShopAPI")
+    const api = new RestApi(this, "StickerShopApi");
     const helloWorldLambdaIntegration = new LambdaIntegration(helloWorldLambda);
     const accountLambdaIntegration = new LambdaIntegration(accountLambda);
 
